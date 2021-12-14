@@ -21,4 +21,18 @@ Start
 README / USERSTORIES.md
 Testing stage
 
+# Challenge 3 - Stack trace / debugging:
+
+Write down the type of error in the issue comments:
+ - NameError: unintialized constant Oystercard
+  
+Write down the file path where the error happened:
+ - ./spec/oystercard_spec.rb:3:in `<top (required)>'
+
+Write down the line number of the error:
+ - rb:3
+
+Use the Ruby Documentation to find out what the error means
+ - Spec infers controller by the describe param when / is found, then searches it in code paths, throws “NameError: uninitialized constant” if it is not found. 
+
 # User story 1:
