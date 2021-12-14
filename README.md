@@ -36,3 +36,17 @@ Use the Ruby Documentation to find out what the error means
  - Spec infers controller by the describe param when / is found, then searches it in code paths, throws “NameError: uninitialized constant” if it is not found. 
 
 # User story 1:
+In order to use public transport
+As a customer
+I want money on my card
+
+____________________
+noun     |   verb
+---------|----------
+customer | want
+card     | use 
+public t.| 
+money    | 
+
+card ---> .balance ---> top_up = topped_up card.
+
