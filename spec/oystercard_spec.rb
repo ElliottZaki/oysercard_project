@@ -27,9 +27,34 @@ describe Oystercard do
         it { is_expected.to respond_to(:deduct).with(1).argument }
 
         it 'deducts amount' do
-            oystercard.deduct(10)
+            #arrange
+            oystercard.top_up(10)
+            #assert
             expect { oystercard.deduct(1) }.to change { oystercard.balance }.by (-1)
         end
     end 
+
+    describe '#in_journey?' do
+        it { is_expected.to respond_to(:in_journey?) }
+    end
+
+    describe '#touch_in' do
+        it { is_expected.to respond_to(:touch_in) }
+
+        it 'touch_in to start journey' do
+            #expect { oystercard.touch_in }.to change{ oystercard.in_journey? }.to true 
+            #arrange
+            oystercard.touch_in
+            #assert
+            expect(oystercard).to be_in_journey
+        end 
+    end
+
+    describe '#touch_out' do
+        it { is_expected.to respond_to(:touch_out) }
+    end
+
+    #expect(oystercard).to be_in_journey
+    #expect to_not 
         
 end 
