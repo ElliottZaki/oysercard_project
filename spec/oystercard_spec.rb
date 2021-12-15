@@ -16,15 +16,20 @@ describe Oystercard do
 
         it 'raises an error message when card exceeds limit' do
             #arrange
-            oystercard.top_up(90)
+            oystercard.top_up(Oystercard::LIMIT) 
             #act
             #assert
-            expect { oystercard.top_up(1) }.to raise_error("Cannot exceed limit (£90)") 
+            expect { oystercard.top_up(1) }.to raise_error "Cannot exceed limit #{Oystercard::LIMIT}"
         end
-
-       
-        
-
     end
+
+    describe '#deduct' do
+        it { is_expected.to respond_to(:deduct).with(1).argument }
+
+        it 'deducts amount' do
+            oystercard.deduct(10)
+            expect { oystercard.deduct(1) }.to change { oystercard.balance }.by (-1)
+        end
+    end 
         
 end 
