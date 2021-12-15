@@ -40,13 +40,22 @@ In order to use public transport
 As a customer
 I want money on my card
 
+# User story 2:
+In order to keep using public transport
+As a customer
+I want to add money to my card
+
 ____________________
 noun     |   verb
 ---------|----------
 customer | want
 card     | use 
-public t.| 
+public t.| add
 money    | 
 
-card ---> .balance ---> top_up = topped_up card.
+card ---> .balance ---> top_up 
 
+# User story 3:
+In order to protect my money from theft or loss
+As a customer
+I want a maximum limit (of £90) on my card
