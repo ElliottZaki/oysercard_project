@@ -2,6 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
     subject (:oystercard) {Oystercard.new}
+    let (:station) {double :station}
 
     it 'has a balance of zero' do
         expect(oystercard.balance).to eq(0)
@@ -17,7 +18,6 @@ describe Oystercard do
         it 'raises an error message when card exceeds limit' do
             #arrange
             oystercard.top_up(Oystercard::LIMIT) 
-            #act
             #assert
             expect { oystercard.top_up(1) }.to raise_error "Cannot exceed limit #{Oystercard::LIMIT}"
         end
@@ -31,9 +31,9 @@ describe Oystercard do
 
         it 'deducts amount' do
             #arrange
-            oystercard.top_up(10)
+            oystercard.top_up(Oystercard::MIN_AMOUNT) 
             #assert
-            expect { oystercard.touch_out }.to change { oystercard.balance }.by (- Oystercard::MIN_AMOUNT)   
+            expect { oystercard.touch_out(station) }.to change { oystercard.balance }.by (- Oystercard::MIN_AMOUNT)   
         end
     end 
 
@@ -48,7 +48,7 @@ describe Oystercard do
             #expect { oystercard.touch_in }.to change{ oystercard.in_journey? }.to true 
             #arrange
             oystercard.top_up(Oystercard::MIN_AMOUNT)
-            oystercard.touch_in
+            oystercard.touch_in(station)
             #assert
             expect(oystercard).to be_in_journey
         end 
@@ -57,7 +57,15 @@ describe Oystercard do
             #arrange
             # oystercard.touch_in // balance = 0
             #asser
-            expect{ oystercard.touch_in }.to raise_error "insufficent funds, minimum of £#{Oystercard::MIN_AMOUNT} is required."
+            expect{ oystercard.touch_in(station) }.to raise_error "insufficent funds, minimum of £#{Oystercard::MIN_AMOUNT} to touch in."
+        end
+
+        it 'stores the entry station' do
+            #arrange
+            oystercard.top_up(Oystercard::MIN_AMOUNT)
+            oystercard.touch_in(station)
+            #assert
+            expect(oystercard.entry_station).to eq station
         end
     end
 
@@ -67,16 +75,24 @@ describe Oystercard do
         it 'is expected to touch_out to end journey' do
         #arrange
             oystercard.top_up(Oystercard::MIN_AMOUNT)
-            oystercard.touch_in
-            oystercard.touch_out
+            oystercard.touch_in(station)
+            oystercard.touch_out(station)
         #assert
             expect(oystercard).to_not be_in_journey
         end
         
-        it 'deducts minimum fare during touch_out' do
-            expect {oystercard.touch_out}.to change { oystercard.balance }.by (- Oystercard::MIN_AMOUNT)
+        it 'deducts minimum fare when touch_out' do
+            expect {oystercard.touch_out(station)}.to change { oystercard.balance }.by (- Oystercard::MIN_AMOUNT)
         end 
-    
+
+        it 'forgets entry station when touch_out' do
+            #arrange
+            oystercard.top_up(Oystercard::MIN_AMOUNT)
+            oystercard.touch_in(station)
+            oystercard.touch_out(station)
+            #assert
+            expect(oystercard.entry_station).to eq nil
+        end
     end
 
 end 

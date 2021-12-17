@@ -1,13 +1,13 @@
 class Oystercard
 
-attr_accessor :balance
+attr_accessor :balance, :entry_station
 
 LIMIT = 90
 MIN_AMOUNT = 1
 
     def initialize 
         @balance = 0
-        @in_journey = false
+        @entry_station = nil 
     end
 
     def top_up(value)
@@ -16,18 +16,23 @@ MIN_AMOUNT = 1
     end
 
     def in_journey?
-        @in_journey
+        !!entry_station
     end
 
-    def touch_in
-        raise "insufficent funds, minimum of £#{MIN_AMOUNT} is required." if @balance < MIN_AMOUNT
-        @in_journey = true
+    def touch_in(station)
+        raise "insufficent funds, minimum of £#{MIN_AMOUNT} to touch in." if @balance < MIN_AMOUNT
+        @entry_station = station
     end
 
-    def touch_out
+    def touch_out(station)
         deduct(MIN_AMOUNT)
-        @in_journey = false
+        @entry_station = nil
     end
+
+   # def generate_station
+    #    stations = [:aldgate, :baker_street, :kings_cross]
+    #    stations[oystercard.rand(stations.length)]
+   # end
 
     private
     def deduct(value)
